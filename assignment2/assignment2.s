@@ -13,11 +13,10 @@
 
 num1: .word 86259
 num2: .word 0xB7A
-newline: .asciiz "\n"
 message1: .asciiz "num1 is: "
-message2: .asciiz "num2 is: "
-message3: .asciiz "num1+num2 = "
-message4: .asciiz "num1-num2 = "
+message2: .asciiz "\nnum2 is: "
+message3: .asciiz "\nnum1+num2 = "
+message4: .asciiz "\nnum1-num2 = "
 
 .text
 .globl main #Define a global function main
@@ -35,10 +34,6 @@ main:
     li  $v0, 1          #
     syscall             #sycall to print an int
 
-    la $a0, newline     #prints a newline
-    li $v0, 4
-    syscall
-
     
     la $a0, message2    #prints 'num2 = '
     li $v0, 4           #
@@ -47,10 +42,6 @@ main:
     move $a0, $t1       #moves num2 from temp register to address register for printing
     li  $v0, 1          #prints num2
     syscall             #prints num2
-
-    la $a0, newline     #print newline
-    li $v0, 4
-    syscall
 
     la $a0, message3    #prints 'num1 + num2 = '
     li $v0, 4
@@ -63,9 +54,6 @@ main:
     syscall
 
 
-    la $a0, newline     #print newline
-    li $v0, 4
-    syscall
     
     la $a0, message4    #prints 'num1-num2 = '
     li $v0, 4
