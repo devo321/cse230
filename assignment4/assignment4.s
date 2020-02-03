@@ -33,7 +33,7 @@ main:
     syscall
     move    $s0, $v0
     
-    la      $a0, message2                      #Num of days
+    la      $a0, message2                           #Num of days
     li      $v0, 4
     syscall
     la      $a0, message3
@@ -41,10 +41,10 @@ main:
 
     li      $v0, 5
     syscall
-    move    $s1, $v0
+    move    $s1, $v0                                #Num beds
 
-
-    bne		$s1, 1, TwoBeds	                    # if $s1 != 1 then TwoBeds
+    li          $t0, 1
+    bne		$s1, $t0, TwoBeds	                    # if $s1 != 1 then TwoBeds
 
     #If 1 bed then:
     li      $t0, 8
@@ -84,11 +84,36 @@ main:
         
     
 
+    #One bed, 8 or more days
+    EightOrMoreOneBed:    
+        li      $t0, 90
+        mult    $s0, $t0
+        mflo    $t1
 
-    EightOrMoreOneBed:                          #One bed, 8 or more days
+        addi    $t2, $t1, -60
 
+        #print total
+        la      $a0, totalPrice
+        li      $v0, 4
+        syscall
+        
+        li      $v0, 1
+        move    $a0, $t2
+        syscall
 
+        la      $a0, dollars
+        li      $v0, 4
+        syscall
 
+        li      $v0, 1
+        move    $a0, $s0
+        syscall
+
+        la      $a0, days
+        li      $v0, 4
+        syscall
+
+        jr      $ra
 
     
     
@@ -96,6 +121,7 @@ main:
     TwoBeds:                                    
             bge		$s0, 8, EightOrMoreTwoBeds 
             #Two beds, < 8 beds
+            
 
 
 
