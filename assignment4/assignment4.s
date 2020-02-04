@@ -25,7 +25,7 @@ bederror: .asciiz "Sorry, we have only one or two beds per room."
 .globl main
 
 main:
-
+    #Lines print the input prompts and recieve input data
     la      $a0, message1
     li      $v0, 4
     syscall
@@ -50,20 +50,20 @@ main:
     bgt     $s1, $t1, bedERR                        #if num beds > 2 got  bedERR
     ble     $s0, $zero, zeroOrLess                  #if days <= 0, goto zeroOrLess
 
-    bne		$s1, $t0, TwoBeds	                    # if $s1 != 1 then TwoBeds
+    bne		$s1, $t0, TwoBeds	                    # if num beds != 1, goto Twobeds
 
 
     #If 1 bed then:
     li      $t0, 8
-    bge		$s0, $t0, EightOrMoreOneBed           # if $t0 > 8 then EightOrMore
+    bge		$s0, $t0, EightOrMoreOneBed             # if $t0 > 8 then EightOrMore
 
 
     #One bed, < 8 days
     li      $t0, 90
-    mult	$s0, $t0			# $s0 * $t0 = Hi and Lo registers
-    mflo	$t1					# copy Lo to $t1
+    mult	$s0, $t0			                    #Multiplies number of days by 90
+    mflo	$t1					                    #Store result
 
-    #print total
+    #Following lines print the output statement
     la      $a0, totalPrice
     li      $v0, 4
     syscall
@@ -93,13 +93,13 @@ main:
 
     #One bed, 8 or more days
     EightOrMoreOneBed:    
-        li      $t0, 90
-        mult    $s0, $t0
-        mflo    $t1
+        li      $t0, 90                 
+        mult    $s0, $t0                            #Multiplies number of days by 90
+        mflo    $t1                                 #Store result
 
-        addi    $t2, $t1, -60
+        addi    $t2, $t1, -60                       #subtract discount of $60 from total
 
-        #print total
+        #Following lines print the output statement
         la      $a0, totalPrice
         li      $v0, 4
         syscall
@@ -128,14 +128,14 @@ main:
     TwoBeds:     
 
             li      $t0, 8         
-            bge		$s0, $t0, EightOrMoreTwoBeds 
-            #Two beds, < 8 beds
+            bge		$s0, $t0, EightOrMoreTwoBeds    #if num of days > 8 && two beds goto EightOrMoreTwoBeds     
+            #Two beds, < 8 days
             li      $t0, 150
 
-            mult    $s0, $t0
-            mflo    $t1
+            mult    $s0, $t0                        #multiplies number of days by 150
+            mflo    $t1                             #store result                             
 
-
+            #Following lines print the output statement
             la      $a0, totalPrice
             li      $v0, 4
             syscall
@@ -161,12 +161,13 @@ main:
     #Two beds, eight or more days
     EightOrMoreTwoBeds:      
 
-            li      $t0, 150
-            mult    $s0, $t0
-            mflo    $t1
+            li      $t0, 150    
+            mult    $s0, $t0                        #Multiplies number of days by 150
+            mflo    $t1                             #stores result
 
-            addi	$t2, $t1, -90			# $t1 = $t1 - 90
+            addi	$t2, $t1, -90			        #subtracts discount of 90 from total price
 
+            #Following lines print the output statement
             la		$a0, totalPrice
             li      $v0, 4
             syscall
@@ -190,16 +191,18 @@ main:
             jr      $ra
 
 
-        bedERR:
+        bedERR:                                     #Executes if theres an incorrect number of beds entered
 
+            #Following lines prints the bed error message
             la      $a0, bederror
             li      $v0, 4
             syscall
 
             jr      $ra
 
-        zeroOrLess:
+            zeroOrLess:                             #Executes if 0 days or less are entered
 
+            #Following lines print the output statement
             la      $a0, totalPrice
             li      $v0, 4
             syscall
@@ -221,19 +224,5 @@ main:
             syscall
 
             jr      $ra
-
-
-
-
-
-            
-            
-            
-
-
-
-
-    
-
 
     jr  $ra
